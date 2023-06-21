@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('client')->nullable();
             $table->text('description')->nullable();
             $table->string('slug');
+            $table->string('img')->nullable();
             $table->timestamps();
         });
     }

@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -42,6 +43,7 @@ class ProjectController extends Controller
             [
                 'name' => 'required|unique:projects',
                 'description' => 'required',
+                'img' => 'nullable|image'
             ],
             [
                 'name.required' => 'Il campo name deve essere compilato',
@@ -49,11 +51,18 @@ class ProjectController extends Controller
                 'description.required' => 'Il campo Description deve essere compilato',
             ]
         );
+        if($request->hasFile('img')){
+            $path = Storage::disk('public')->put('project_images', $request->img);
+            $form_data['img'] = $path;
+        }
+
         $form_data = $request->all();
 
         $slug = Project::generateSlug($request->name);
 
         $form_data['slug'] = $slug;
+
+        
 
         $new_project = new Project();
         $new_project->fill($form_data);
@@ -98,6 +107,7 @@ class ProjectController extends Controller
             [
                 'name' => 'required|unique:projects,name,' . $project->id,
                 'description' => 'required',
+                'img' => 'nullable|image'
             ],
             [
                 'name.required' => 'Il campo name deve essere compilato',

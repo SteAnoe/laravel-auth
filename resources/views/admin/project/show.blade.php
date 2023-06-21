@@ -14,4 +14,6 @@ Portfolio | Project Show
     Cliente: {{$project->client}}
 </p>
 
+<img src="{{asset('storage/' . $project->img)}}" alt="">
+
 @endsection
