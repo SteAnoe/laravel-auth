@@ -51,12 +51,14 @@ class ProjectController extends Controller
                 'description.required' => 'Il campo Description deve essere compilato',
             ]
         );
+
+        $form_data = $request->all();
+
         if($request->hasFile('img')){
             $path = Storage::disk('public')->put('project_images', $request->img);
             $form_data['img'] = $path;
         }
 
-        $form_data = $request->all();
 
         $slug = Project::generateSlug($request->name);
 
@@ -65,7 +67,9 @@ class ProjectController extends Controller
         
 
         $new_project = new Project();
+
         $new_project->fill($form_data);
+        
         $new_project->save();
 
         return redirect()->route('admin.project.index')->with('success', "Project $new_project->name creato");;
